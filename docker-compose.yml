@@ -1,0 +1,62 @@
+version: '3'
+
+services:
+  rabbit:
+    image: rabbitmq:3.7.15-management-alpine
+    restart: always
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+  conda:
+    image: 310018531177.dkr.ecr.us-west-2.amazonaws.com/conda # Use remote image
+    command: npm start
+    env_file:
+      - ../conda/.env
+    environment:
+      - AMQP_HOST_URI=amqp://rabbit
+    restart: always
+    volumes:
+      - ../conda/db:/src/db
+      - ../conda/cert:/src/cert
+
+
+# services:
+#   conda:
+#     image: 310018531177.dkr.ecr.us-west-2.amazonaws.com/conda
+#     environment:
+#       - BAUD_RATE=115200
+#       - AWS_IOT_ENDPOINT=as2j6sf8wvur6-ats.iot.us-west-2.amazonaws.com
+#       - DEVICE_NAME=<DEVICE_NAME>
+#       - LOG_LEVEL=info
+#       - DB_LOCATION=/src/db/db.sqlite
+#       - SENTRY_URL=<SENTRY_URL>
+#       - TRACKING=<TRACKING>
+#       - ENABLE_NOTIFICATIONS=<ENABLE_NOTIFICATIONS>
+#       - ELASTICSEARCH_URL=<ADD THIS IF YOU WANNA TRACK CUSTOM EVENTS>
+#       - ELASTICSEARCH_REGION=<ADD THIS IF YOU WANNA TRACK CUSTOM EVENTS>
+#       - CLIENT_CERT_LOCATION=<PATH TO CERT, eg cert/certificate.us-west-2.pem.crt>
+#       - PRIVATE_KEY_LOCATION=<PATH TO CERT, eg cert/private.us-west-2.pem.key>
+#       - CA_CERT_LOCATION=<PATH TO CERT, eg cert/AmazonRootCA1.pem>
+#     network_mode: host
+#     restart: always
+#     volumes:
+#       - ./db:/src/db
+#       - ./cert:/src/cert
+#     devices:
+#       - /dev/ttyACM0:/dev/ttyACM0
+
+#   rabbit:
+#     image: rabbitmq:3.6.14-alpine
+#     restart: always
+#     network_mode: host
+
+#   anaconda-pi:
+#     image: 310018531177.dkr.ecr.us-west-2.amazonaws.com/anaconda-pi
+#     restart: always
+#     network_mode: host
+#     environment:
+#       - SENTRY_URL=<SENTRY_URL>
+#       - DB_LOCATION=/src/db/db.sqlite
+#     volumes:
+#       - ./db:/src/db

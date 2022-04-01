@@ -1,0 +1,14 @@
+.DS_Store
+.env
+.git
+.nyc_output
+.vscode
+/cert
+/coverage
+/db
+node_modules
+README.md
+sonar-project.properties
+cache
+sonar*
+.scannerwork

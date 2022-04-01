@@ -1,0 +1,29 @@
+{
+  "name": "jooycartest",
+  "version": "1.0.0",
+  "description": "Jooycar Test API",
+  "main": "app.js",
+  "scripts": {
+    "debug": "node debug app.js",
+    "start": "node app.js",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andresroyarce/JooycarTest.git"
+  },
+  "author": "Andres Oyarce",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andresroyarce/JooycarTest/issues"
+  },
+  "homepage": "https://github.com/andresroyarce/JooycarTest#readme",
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "mongoose": "^6.2.9"
+  },
+  "devDependencies": {
+    "jest": "^27.5.1"
+  }
+}

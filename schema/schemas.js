@@ -15,9 +15,8 @@ const tripSchema = new mongoose.Schema({
     distance: { type: Number, required: false },
     duration: { type: Number, required: false },
     overspeedsCount: { type: Number, required: false },
-    boundingBox: [{ lat: { type: Number }, lon: { type: Number }, required: false }]
-
-});
+    boundingBox: [{ lat: { type: Number }, lon: { type: Number }, _id: false, required: false }]
+}, { versionKey: false });
 
 const readingListSchema = new mongoose.Schema({ 
     readings: [readingSchema]

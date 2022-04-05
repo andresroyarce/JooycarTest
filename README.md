@@ -10,10 +10,38 @@ Repository          | Version
 **MongoDB**         | 5.0.6
 **Express**         | 4.17.3
 
-## Use
 
-Run...
+## Clone Repository
+
+Clone this repository with:
+
 
 ```
-$ pip install node
+$ git clone https://github.com/andresroyarce/JooycarTest.git
+```
+
+Navegate to the directory. Then create a default *.env* file based on the example by copying it with this command:
+
+
+```
+$ cp .env.example .env
+```
+
+You can use the defaults values. Before run the docker containers, you must have installed *docker engine* and *docker compose*.
+
+## Run test
+
+For run the test use this command:
+
+```
+$  sudo docker-compose -f docker-compose.test.yml run node
+```
+
+## Run container
+
+For run the container, use this command:
+
+
+```
+$  sudo docker-compose up --build
 ```

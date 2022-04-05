@@ -1,24 +1,31 @@
 version: '3'
-
 services:
-  rabbit:
-    image: rabbitmq:3.7.15-management-alpine
+  node:
     restart: always
-    ports:
-      - 5672:5672
-      - 15672:15672
-
-  conda:
-    image: 310018531177.dkr.ecr.us-west-2.amazonaws.com/conda # Use remote image
-    command: npm start
-    env_file:
-      - ../conda/.env
+    #network_mode: host
+    build: .
     environment:
-      - AMQP_HOST_URI=amqp://rabbit
-    restart: always
+      - API_HOST=http://localhost
+      - API_PORT=3000
+      - API_PATH=/api/trips/v1
+
+        # Database for production
+      - DB_PATH=mongodb://localhost
+      - DB_PORT=27017
+      - DB_TABLE=tripsDocker
+    ports:
+      - 80:3000
     volumes:
-      - ../conda/db:/src/db
-      - ../conda/cert:/src/cert
+      - ./:/code
+  mongo:
+    image: mongo
+    #network_mode: host
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb:/data/db
+volumes:
+ mongodb:
 
 
 # services:

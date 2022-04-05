@@ -29,6 +29,9 @@ module.exports = {
   // coveragePathIgnorePatterns: [
   //   "\\\\node_modules\\\\"
   // ],
+  coveragePathIgnorePatterns: [
+    "\\\\node_modules\\\\"
+  ],
 
   // Indicates which provider should be used to instrument code for coverage
   coverageProvider: "v8",
@@ -94,6 +97,7 @@ module.exports = {
 
   // A preset that is used as a base for Jest's configuration
   // preset: undefined,
+  // "preset": "@shelf/jest-mongodb"
 
   // Run tests from one or more projects
   // projects: undefined,
@@ -126,6 +130,7 @@ module.exports = {
 
   // The paths to modules that run some code to configure or set up the testing environment before each test
   // setupFiles: [],
+  setupFiles: ['<rootDir>/test/setup.js'],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
   // setupFilesAfterEnv: [],
@@ -138,6 +143,7 @@ module.exports = {
 
   // The test environment that will be used for testing
   // testEnvironment: "jest-environment-node",
+  testEnvironment: "node",
 
   // Options that will be passed to the testEnvironment
   // testEnvironmentOptions: {},
@@ -185,7 +191,7 @@ module.exports = {
 
   // Indicates whether each individual test should be reported during the run
   // verbose: undefined,
-
+  verbose: true
   // An array of regexp patterns that are matched against all source file paths before re-running tests in watch mode
   // watchPathIgnorePatterns: [],
 

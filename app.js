@@ -3,30 +3,22 @@ const bodyParser = require('body-parser');
 const status = require('http-status');
 const geolib = require('geolib');
 const nodeGeocoder = require('node-geocoder');
+
 const config = require('./config/config');
 const schemas = require('./schema/schemas');
+
 const app = express();
-const port = config.API_PORT;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.raw());
 
-// Just for Control and Debug
-console.log(`Your port is ${config.API_PATH}`); // 8626
-const database = config.DB_PATH + ':' + config.DB_PORT + '/' + config.DB_TABLE;
-console.log("MongoDB: " + database);
-
 let options = {
     provider: 'openstreetmap'
 };
 let geoCoder = nodeGeocoder(options);
+const dbMongo = schemas.mongoose;
 
-main().catch(err => console.log(err));
-
-async function main() {
-    await schemas.mongoose.connect(database);
-};
 
 const handleError = function (res, err) {
     console.log(err);
@@ -56,7 +48,11 @@ app.get(config.API_PATH, (req, res) => {
             return handleError(res, err);
         };
 
-        console.log('Trip:', trip);
+        // console.log('Trip:', trip);
+        if (trip.length === 0) {
+            res.status(status.OK).send(schemas.validationErrorSchema(status.OK, 22, 'Query returns no results', 'Consulta no entrega ningun resultlado'));
+            return;
+        };
 
         if (trip.length <= offset) {
             res.status(status.REQUESTED_RANGE_NOT_SATISFIABLE).send(schemas.validationErrorSchema(status.REQUESTED_RANGE_NOT_SATISFIABLE, 22, 'Offset Error, is bigger than length result', 'Error de offset, es mayor que el largo del resultado'));
@@ -69,70 +65,10 @@ app.get(config.API_PATH, (req, res) => {
 
 
         let filterElements = trip.splice(offset, limit);
-        console.log('Trip offset:', filterElements);
+        // console.log('Trip offset:', filterElements);
         res.status(status.OK).send(filterElements);
     });
 
-});
-
-app.get('/mock', (req, res) => {
-    const trip1 = {
-        //'_id': '5efc0d7da7076973f1515120',
-        start: {
-            time: 1642539928000,
-            lat: -33.580158,
-            lon: -70.567227,
-            address: 'Avenida Apoquindo 291'
-        },
-        end: {
-            time: 1642541428000,
-            lat: -33.580462,
-            lon: -70.567177,
-            address: 'Avenida Grecia 1043'
-        },
-        distance: 10.4,
-        duration: 1500000,
-        overspeedsCount: 2,
-        boundingBox: [
-            { lat: -33.580462, lon: -70.567177 },
-            { lat: -33.580432, lon: -70.567147 },
-            { lat: -33.580432, lon: -70.567147 },
-            { lat: -33.580433, lon: -70.567144 }
-        ]
-    };
-
-    const trip2 = {
-        '_id': '5efc0d7da7076973f1515333',
-        start: {
-            time: 1642539929000,
-            lat: -33.580158,
-            lon: -70.567227,
-            address: 'Avenida La Florida 923'
-        },
-        end: {
-            time: 1642541428000,
-            lat: -33.580462,
-            lon: -70.567177,
-            address: 'Avenida El Peñón 65'
-        },
-        distance: 10.4,
-        duration: 1500000,
-        overspeedsCount: 2,
-        boundingBox: [
-            { lat: -33.580462, lon: -70.567177 },
-            { lat: -33.580432, lon: -70.567147 },
-            { lat: -33.580432, lon: -70.567147 },
-            { lat: -33.580433, lon: -70.567144 }
-        ]
-    };
-
-    const tripMock1 = new schemas.trip(trip1);
-    const tripMock2 = new schemas.trip(trip2);
-
-    tripMock1.save().then(console.log("Fin 1"));
-    tripMock2.save().then(console.log("Fin 2"));
-
-    res.send('Mock data saved');
 });
 
 app.post(config.API_PATH, function (req, res, next) {
@@ -221,6 +157,5 @@ app.post(config.API_PATH, function (req, res, next) {
 
 });
 
-app.listen(port, () => {
-    console.log(`Jooycar API Test listening in port: ${port}`);
-});
+
+module.exports = ({app, dbMongo, schemas});

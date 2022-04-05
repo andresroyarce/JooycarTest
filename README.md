@@ -9,6 +9,8 @@ Repository          | Version
 **Nodejs**          | 16.14.2
 **MongoDB**         | 5.0.6
 **Express**         | 4.17.3
+**Docker**          | 20.10.14
+**Docker-Compose**  | 1.29.2
 
 
 ## Clone Repository

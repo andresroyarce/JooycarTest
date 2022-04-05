@@ -1,22 +1,13 @@
-FROM cypress/browsers:node12.6.0-chrome77
+FROM node:16.14.2 as base
 
-# avoid too many progress messages
-# https://github.com/cypress-io/cypress/issues/1243
-ENV CI=1
+LABEL MAINTAINER = "andres.r.oyarce@gmail.com"
+LABEL version="1.0.0"
 
-ARG NPM_TOKEN
-ARG NPM_HOST=registry.npmjs.org
-ARG NPM_HOST_PROTOCOL=https
+WORKDIR /app
+COPY ["package.json", "package-lock.json*", ".env", "./"]
 
-RUN npm config set "//$NPM_HOST/:_authToken=$NPM_TOKEN"
-RUN npm config set @miroculus:registry="$NPM_HOST_PROTOCOL://$NPM_HOST"
-
-WORKDIR /src
-
-COPY package*.json ./
-
+from base as test
 RUN npm ci
+COPY . .
+RUN npm run test
 
-COPY . ./
-
-CMD ["npm", "run" "e2e:ci"]

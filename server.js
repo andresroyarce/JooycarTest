@@ -2,7 +2,7 @@ const { app, dbMongo } = require('./app');
 const config = require('./config/config');
 
 // Just for Control and Debug
-console.log(`Your port is ${config.API_PATH}`); // 8626
+console.log(`Your port is ${config.DB_PORT}`); // 8626
 const database = config.DB_PATH + ':' + config.DB_PORT + '/' + config.DB_TABLE;
 console.log("MongoDB: " + database);
 

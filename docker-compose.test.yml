@@ -1,14 +1,18 @@
 version: '3'
 services:
   node:
-    restart: always
-    build: .
+    build:
+      context: .
+      dockerfile: test.Dockerfile
+    command: npm run test
     ports:
       - 80:3000
     env_file:
       - ./.env
     volumes:
       - ./:/code
+    depends_on:
+      - mongo
   mongo:
     image: mongo
     ports:
